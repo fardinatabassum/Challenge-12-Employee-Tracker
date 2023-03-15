@@ -1,0 +1,25 @@
+{
+  "name": "challenge-12-employee-tracker",
+  "version": "1.0.0",
+  "description": "this repository contains the code used to make an employee tracker",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fardinatabassum/Challenge-12-Employee-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fardinatabassum/Challenge-12-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/fardinatabassum/Challenge-12-Employee-Tracker#readme",
+  "dependencies": {
+    "inquirer": "^9.1.4",
+    "mysql2": "^3.2.0"
+  }
+}
