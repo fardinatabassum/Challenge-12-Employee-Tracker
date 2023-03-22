@@ -19,30 +19,40 @@ const options = () => {
       {
         type: "list",
         name: "options",
-        message: "What would you like to do?",
+        message: "What would you like to do? (Use arrow keys)",
         choices: [
+          "View All Employees",
           "Add Employee",
           "Update Employee Role",
-          "View Employees",
-          "View Roles",
+          "View All Roles",
           "Add Role",
-          "View Departments",
+          "View All Departments",
           "Add Department",
+          "Quit"
         ],
       },
     ])
     .then((res) => {
-      if (res.options == "View Employees") {
+      if (res.options == "View All Employees") {
         viewEmployees();
       }
-      if (res.options == "View Roles") {
+      if (res.options == "Add Employee") {
+        addEmployee();
+      }
+      if (res.options == "View All Roles") {
         viewRoles();
+      }
+      if (res.options == "Add Role") {
+        addRole();
       }
       if (res.options == "View All Departments") {
         viewDepartments();
       }
-      if (res.options == "Add Employee") {
-        addEmployee();
+      if (res.options == "Add Department") {
+        addDepartment();
+      }
+      if (res.options == "Quit") {
+        viewRoles();
       }
     });
 };
@@ -109,6 +119,56 @@ const addEmployee = () => {
     });
 };
 
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "department_name",
+        message: "What is the name of the department?",
+      },
+    ])
+    .then((res) => {
+      db.query("INSERT INTO department SET ?", {
+        department_name: res.department_name,
+      });
+      console.log(
+        `${res.department_name} was added to the database`
+      );
+      options();
+    });
+};
+
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "role_name",
+        message: "What is the name of the role?",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary of the role?",
+      },
+      {
+        type: "list",
+        name: "department",
+        message: "Which department does the role belong to?",
+        choices: []
+      },
+    ])
+    .then((res) => {
+      db.query("INSERT INTO role SET ?", {
+        role_name: res.title,
+      });
+      console.log(
+        `${res.title} was added to the database`
+      );
+      options();
+    });
+};
 
 // function updateEmployee() {
 //     const employeeSql = `SELECT * FROM employee`;
