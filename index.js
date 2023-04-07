@@ -30,6 +30,7 @@ const options = () => {
           "Delete Role",
           "View All Departments",
           "Add Department",
+          "Delete Department",
           "Quit",
         ],
       },
@@ -61,6 +62,9 @@ const options = () => {
       }
       if (res.options == "Add Department") {
         addDepartment();
+      }
+      if (res.options == "Delete Department") {
+        deleteDepartment();
       }
       if (res.options == "Quit") {
         process.exit();
@@ -141,7 +145,33 @@ const deleteRole  = () => {
 
 // Delete Department
 const deleteDepartment = () => {
-  const departmentSql = `SELECT * FROM `
+  const departmentSql = `SELECT * FROM department`;
+  db.query(departmentSql, (err, data) => {
+    if (err) throw err;
+    const departments = data.map(({name}) => ({
+      name : name,
+      value : name
+    }));
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "name",
+          message : "Which department would you like to delete?",
+          choices : departments
+        }
+      ])
+      .then((departmentChoice) => {
+        const department = departmentChoice.name;
+        db.query("DELETE FROM department WHERE ?", {
+          name : department
+        })
+        console.log(
+          `${departmentChoice.name} has been deleted!`
+        );
+        options()
+      })
+  })
 }
 
 const viewRoles = () => {
