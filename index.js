@@ -175,7 +175,7 @@ const deleteDepartment = () => {
 }
 
 const viewRoles = () => {
-  db.query("SELECT * FROM role", function (err, res) {
+  db.query("SELECT role.id, role.title, department.name, role.salary FROM department JOIN role ON department.id = role.department_id", function (err, res) {
     if (err) throw err;
     console.table(res);
     options();
