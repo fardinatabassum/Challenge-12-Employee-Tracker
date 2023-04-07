@@ -324,7 +324,7 @@ function updateEmployee() {
               db.query(sql, params, (err, result) => {
                 if (err) throw err;
                 console.log("Employee has been updated!");
-                menu();
+                options();
               });
             });
         });
