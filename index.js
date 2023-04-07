@@ -1,6 +1,8 @@
+// import and require inquirer and mysql2
 import inquirer from "inquirer";
 import { createConnection } from "mysql2";
 
+// connect to databse
 const db = createConnection({
   host: "localhost",
   user: "root",
@@ -13,6 +15,7 @@ db.connect(function (err) {
   options();
 });
 
+// inquirer
 const options = () => {
   inquirer
     .prompt([
@@ -72,6 +75,7 @@ const options = () => {
     });
 };
 
+// function to view employee
 const viewEmployees = () => {
   db.query("SELECT * FROM employee", function (err, res) {
     if (err) throw err;
@@ -80,7 +84,7 @@ const viewEmployees = () => {
   });
 };
 
-// delete employee function
+// function to delete employee
 const deleteEmployee = () => {
   const employeeSql = `SELECT * FROM employee`;
   db.query(employeeSql, (err, data) => {
@@ -112,7 +116,7 @@ const deleteEmployee = () => {
   });
 };
 
-// delete role 
+// function to delete role
 const deleteRole  = () => {
   const roleSql = `SELECT * FROM role`;
   db.query(roleSql, (err, data) => {
@@ -143,7 +147,7 @@ const deleteRole  = () => {
   })
 }
 
-// Delete Department
+// function to delete department
 const deleteDepartment = () => {
   const departmentSql = `SELECT * FROM department`;
   db.query(departmentSql, (err, data) => {
@@ -174,6 +178,7 @@ const deleteDepartment = () => {
   })
 }
 
+// function to view role
 const viewRoles = () => {
   db.query("SELECT role.id, role.title, department.name, role.salary FROM department JOIN role ON department.id = role.department_id", function (err, res) {
     if (err) throw err;
@@ -182,6 +187,7 @@ const viewRoles = () => {
   });
 };
 
+// function to view department
 const viewDepartments = () => {
   db.query("SELECT * FROM department", function (err, res) {
     if (err) throw err;
@@ -190,6 +196,7 @@ const viewDepartments = () => {
   });
 };
 
+// function to add employee
 const addEmployee = () => {
   inquirer
     .prompt([
@@ -228,6 +235,7 @@ const addEmployee = () => {
     });
 };
 
+// function to add department
 const addDepartment = () => {
   inquirer
     .prompt([
@@ -246,6 +254,7 @@ const addDepartment = () => {
     });
 };
 
+// function to add role
 const addRole = () => {
   inquirer
     .prompt([
@@ -276,7 +285,7 @@ const addRole = () => {
     });
 };
 
-//update employee function
+//function to update employee
 function updateEmployee() {
   const employeeSql = `SELECT * FROM employee`;
   db.query(employeeSql, (err, data) => {
