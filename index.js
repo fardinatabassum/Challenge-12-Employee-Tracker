@@ -27,6 +27,7 @@ const options = () => {
           "Update Employee Role",
           "View All Roles",
           "Add Role",
+          "Delete Role",
           "View All Departments",
           "Add Department",
           "Quit",
@@ -43,11 +44,17 @@ const options = () => {
       if (res.options == "Delete Employee") {
         deleteEmployee();
       }
+      if (res.options == "Update Employee Role") {
+        updateEmployee();
+      }
       if (res.options == "View All Roles") {
         viewRoles();
       }
       if (res.options == "Add Role") {
         addRole();
+      }
+      if (res.options == "Delete Role") {
+        deleteRole();
       }
       if (res.options == "View All Departments") {
         viewDepartments();
@@ -69,6 +76,7 @@ const viewEmployees = () => {
   });
 };
 
+// delete employee function
 const deleteEmployee = () => {
   const employeeSql = `SELECT * FROM employee`;
   db.query(employeeSql, (err, data) => {
@@ -82,7 +90,7 @@ const deleteEmployee = () => {
         {
           type: "list",
           name: "name",
-          message: "Which employee would you like to update?",
+          message: "Which employee would you like to delete?",
           choices: employees,
         },
       ])
@@ -90,7 +98,7 @@ const deleteEmployee = () => {
         console.log(empChoice.name)
         const employee = empChoice.name;
         db.query("DELETE FROM employee WHERE ?", {
-          role_id: employee
+          id: employee
         })
         console.log(
           `Deleted!`
@@ -99,6 +107,42 @@ const deleteEmployee = () => {
       });
   });
 };
+
+// delete role 
+const deleteRole  = () => {
+  const roleSql = `SELECT * FROM role`;
+  db.query(roleSql, (err, data) => {
+    if (err) throw err;
+    const roles = data.map(({ title}) => ({
+      title : title,
+      value : title
+    }));
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "title",
+          message : "Which role would you like to delete?",
+          choices: roles,
+        }
+      ])
+      .then((roleChoice) =>{
+        const role = roleChoice.title;
+        db.query("DELETE FROM role WHERE ?", {
+          title : role,
+        })
+        console.log(
+          `${roleChoice.title} has been deleted!`
+        );
+        options()
+      });
+  })
+}
+
+// Delete Department
+const deleteDepartment = () => {
+  const departmentSql = `SELECT * FROM `
+}
 
 const viewRoles = () => {
   db.query("SELECT * FROM role", function (err, res) {
@@ -165,7 +209,7 @@ const addDepartment = () => {
     ])
     .then((res) => {
       db.query("INSERT INTO department SET ?", {
-        department_name: res.department_name,
+        name: res.department_name,
       });
       console.log(`${res.department_name} was added to the database`);
       options();
@@ -186,21 +230,23 @@ const addRole = () => {
         message: "What is the salary of the role?",
       },
       {
-        type: "list",
-        name: "department",
-        message: "Which department does the role belong to?",
-        choices: [],
+        type: "input",
+        name: "department_id",
+        message: "What is the id of the department?",
       },
     ])
     .then((res) => {
       db.query("INSERT INTO role SET ?", {
-        role_name: res.title,
+        title: res.role_name,
+        salary: res.salary,
+        department_id: res.department_id,
       });
-      console.log(`${res.title} was added to the database`);
+      console.log(`${res.role_name} was added to the database`);
       options();
     });
 };
 
+//update employee function
 function updateEmployee() {
   const employeeSql = `SELECT * FROM employee`;
   db.query(employeeSql, (err, data) => {
@@ -222,7 +268,7 @@ function updateEmployee() {
         const employee = empChoice.name;
         const params = [];
         params.push(employee);
-        const roleSql = `SELECT * FROM roles`;
+        const roleSql = `SELECT * FROM role`;
         db.query(roleSql, (err, data) => {
           if (err) throw err;
           const roles = data.map(({ id, title }) => ({
